@@ -1,6 +1,6 @@
 cask "converty" do
-  version "0.1.0"
-  sha256 "eace4163071139d85bed90ea864c0d219c46c2667ba02cd35c090ede902954a3"
+  version "0.1.1"
+  sha256 "a369f89e3255dcb39e362d6f0b890654e1ee170d3568e1e2b373d0c83ed06cc8"
 
   url "https://github.com/rirachii/converty/releases/download/v#{version}/Converty-#{version}-macOS-arm64.dmg"
   name "Converty"

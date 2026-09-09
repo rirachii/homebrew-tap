@@ -1,0 +1,33 @@
+name: Cask checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  converty:
+    runs-on: macos-15
+    timeout-minutes: 15
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: 1
+      HOMEBREW_NO_INSTALL_CLEANUP: 1
+      HOMEBREW_NO_ANALYTICS: 1
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Register the checked-out cask
+        run: brew tap rirachii/tap "$GITHUB_WORKSPACE"
+      - name: Check cask style and metadata
+        run: |
+          brew style Casks/converty.rb
+          brew audit --cask rirachii/tap/converty
+      - name: Install and verify the published app
+        run: |
+          brew install --cask rirachii/tap/converty
+          codesign --verify --deep --strict /Applications/Converty.app
+          test -x /Applications/Converty.app/Contents/Resources/bin/ffmpeg
+          brew uninstall --cask rirachii/tap/converty

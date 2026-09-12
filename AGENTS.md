@@ -11,5 +11,6 @@
 - Run Homebrew style and audit checks, then verify a real installation without overwriting an existing app.
 - For local QA, set `HOMEBREW_NO_AUTO_UPDATE=1`, `HOMEBREW_NO_INSTALL_CLEANUP=1`, and `HOMEBREW_NO_ANALYTICS=1`; use a temporary `--appdir` and never adopt or force over an existing app.
 - Keep maintenance instructions in the tracked README.
+- `main` requires pull requests and both cask CI checks with no bypass actors. Follow the README's branch-protection section and keep `.github/rulesets/main.json` aligned with approved GitHub settings changes.
 
 For the explicitly experimental Chirpberry preview, online audit uses `--except=github_prerelease_version` because the published GitHub release intentionally remains a prerelease. Do not expand this exception or relabel the release stable to satisfy audit. All checksum, architecture, installation, signature, and other online checks still apply.

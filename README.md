@@ -43,3 +43,25 @@ Use a disposable macOS runner for install and uninstall checks if a local applic
 
 This is the project's own tap, separate from Homebrew's main cask repository.
 The tap is GPL-3.0-or-later; bundled software retains its own licenses and accompanying source materials.
+
+## Chirpberry preview — prepared, not published
+
+`Casks/chirpberry.rb` is prepared for Chirpberry `0.2.0-preview.1`. Its GitHub release is currently a draft, so **do not merge or advertise this cask as installable yet**. After publishing the preview and verifying its anonymous DMG download, the command will be:
+
+```sh
+brew install --cask rirachii/tap/chirpberry
+```
+
+Requires Apple Silicon and macOS 26+. The cask pins the exact DMG checksum and installs `Chirpberry.app` into `Applications/Chirpberry Electron Candidate/`. It preserves the separate native app, notes, and preferences. Homebrew refuses an occupied target without an override; do not force or adopt over a running app.
+
+The preview is ad-hoc signed and not notarized. Live-service, clean-user permissions, real Calendar/call detection, and sustained-meeting performance remain under verification. Read the [release checklist](https://github.com/rirachii/chirpberry/blob/main/docs/release-readiness.md). No launch, privileged install, quarantine changes, background services, or user-data cleanup hooks are included.
+
+Before merging: verify public release/source URLs and the downloaded SHA-256, then run `brew style Casks/chirpberry.rb`, `brew audit --online --cask rirachii/tap/chirpberry`, and a disposable install/uninstall. The Chirpberry CI job checks metadata on PRs; its actual public-download/install step runs only via workflow dispatch after assets are public. Converty's cask and checks are unchanged.
+
+### Preview verification on September 12, 2026
+
+Homebrew style and basic cask audit passed. The authenticated GitHub draft DMG was downloaded and matched SHA-256 `2a08e4a9e281947678ff9353da1bc9d10aa4bb2d70aa067c1ab8826b232bf074`. That exact download was placed in Homebrew's checksum-validated cache for the unpublished URL. A temporary local QA tap installed the cask into a temporary application directory; the app archive matched the previously tested package, deep signature verification passed, and uninstall removed the temporary app. The existing installed Chirpberry app remained unchanged.
+
+Anonymous public fetch and `brew audit --online` remain pending publication. Gatekeeper assessment rejected the unnotarized installed preview; an attempted MCP launch exited with signal 9. No quarantined first-launch acceptance is claimed, and no quarantine/Gatekeeper settings were changed. The CI download step checks file presence and signatures without launching an unnotarized helper.
+
+The initial local install omitted `HOMEBREW_NO_INSTALL_CLEANUP`, so Homebrew started its automatic cleanup of old package versions and caches. It was interrupted; active `opt` links and `brew missing` subsequently showed no broken links or missing dependencies. All remaining commands disable cleanup. Future local QA must use the environment settings in AGENTS.md.

@@ -44,6 +44,34 @@ Use a disposable macOS runner for install and uninstall checks if a local applic
 This is the project's own tap, separate from Homebrew's main cask repository.
 The tap is GPL-3.0-or-later; bundled software retains its own licenses and accompanying source materials.
 
+## Main branch protection
+
+Enabled September 12, 2026 at the owner's request. GitHub's active [Protect main ruleset](https://github.com/rirachii/homebrew-tap/rules/23016477), ID `23016477`, targets exactly `refs/heads/main`. Its intended configuration is tracked in [`.github/rulesets/main.json`](.github/rulesets/main.json); GitHub settings enforce it, not the presence of this file.
+
+- Changes must go through a pull request.
+- Both `converty` and `chirpberry` checks must pass and come from the GitHub Actions integration (ID `15368`).
+- Pull requests must be up to date with `main`, with all review conversations resolved. New changes dismiss prior approvals.
+- Force pushes and deletion are blocked, with no administrator or automation bypass actors.
+- Existing merge, squash, and rebase methods remain available.
+
+Approving-review count is zero because `rirachii` is currently the only collaborator. Pull requests and CI remain mandatory without requiring a second person's approval. Revisit the review count when another maintainer joins; do not add bypasses to work around failing checks.
+
+Both jobs in `.github/workflows/cask.yml` run on every pull request without path filters. The `converty` job checks style and metadata, installs the public app on a disposable runner, verifies its deep signature and bundled FFmpeg presence, and uninstalls it. The `chirpberry` job checks style and metadata on pull requests; its online audit and installation verification still require a separate workflow dispatch. Passing PR checks does not replace the published-asset, source, checksum, or actual release acceptance requirements above and below.
+
+Keep this shared tap separate from the application repositories: it holds installer definitions for both Converty and Chirpberry, while each app retains its source and releases upstream. Converty and this tap use the same protection policy with repository-specific CI check names. Their settings are independent and do not automatically synchronize.
+
+After creation, the API reported `main.protected = true`, all four rules applied to `main`, and no rules applied to an unrelated branch name. The settings update left the `main` commit unchanged. The live settings matched the tracked configuration, including required checks, trusted integration, strict policy, zero required approvals, and empty bypass list. No force push or deletion was attempted against the live branch.
+
+Read the live configuration before changing it:
+
+```sh
+gh api repos/rirachii/homebrew-tap/rulesets/23016477
+gh api repos/rirachii/homebrew-tap/rules/branches/main
+gh api repos/rirachii/homebrew-tap/branches/main --jq '{name, protected}'
+```
+
+Keep this section and the JSON aligned with approved settings changes. Coordinate required check names and triggers with ruleset changes so passing, up-to-date PRs can still merge. Editing the JSON alone does not update GitHub.
+
 ## Chirpberry experimental preview
 
 Install [Chirpberry 0.2.0-preview.1](https://github.com/rirachii/chirpberry/releases/tag/v0.2.0-preview.1), an experimental meeting notebook for Mac:

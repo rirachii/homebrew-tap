@@ -47,12 +47,17 @@ jobs:
         run: |
           brew style Casks/chirpberry.rb
           brew audit --cask rirachii/tap/chirpberry
-      - name: Verify the published Chirpberry download and install
+      - name: Audit the published Chirpberry preview
+        env:
+          HOMEBREW_GITHUB_API_TOKEN: ${{ github.token }}
         if: github.event_name == 'workflow_dispatch'
         run: |
           # This owner-approved custom-tap preview intentionally stays a GitHub prerelease.
           # Retain all other online audits, download checksum checks, and security controls.
           brew audit --online --except=github_prerelease_version --cask rirachii/tap/chirpberry
+      - name: Verify the published Chirpberry download and install
+        if: github.event_name == 'workflow_dispatch'
+        run: |
           brew install --cask --appdir="$RUNNER_TEMP/chirpberry-apps" rirachii/tap/chirpberry
           codesign --verify --deep --strict "$RUNNER_TEMP/chirpberry-apps/Chirpberry Electron Candidate/Chirpberry.app"
           test -x "$RUNNER_TEMP/chirpberry-apps/Chirpberry Electron Candidate/Chirpberry.app/Contents/Resources/chirpberry-mcp"

@@ -1,6 +1,6 @@
 # Homebrew tap instructions
 
-- `Casks/converty.rb` is the canonical Homebrew definition for Converty.
+- The Converty cask is withdrawn while Converty is sold through Stripe.
 - `Casks/chirpberry.rb` is the canonical Chirpberry Mac preview cask. Its release must be public and anonymously downloadable with the pinned checksum before this cask is merged. Install into its separate Electron candidate folder; preserve the native app and user data.
 - Pin the exact versioned upstream release URL and SHA-256 checksum.
 - Verify release assets and corresponding source exist before updating a cask.

@@ -39,10 +39,6 @@
         "do_not_enforce_on_create": false,
         "required_status_checks": [
           {
-            "context": "converty",
-            "integration_id": 15368
-          },
-          {
             "context": "chirpberry",
             "integration_id": 15368
           }
